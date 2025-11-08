@@ -1,0 +1,21 @@
+class Solution {
+  public:
+    vector<int> rightView(Node *root) {
+       queue<Node*>q;
+       vector<int>result;
+         q.push(root);
+       while(!q.empty()){
+       
+           result.push_back(q.front()->data);
+           int n=q.size();
+           while(n--){
+               Node*temp=q.front();
+               q.pop();
+               if(temp->right)q.push(temp->right);
+               if(temp->left)q.push(temp->left);
+           }
+       }
+       return result;
+        
+    }
+};
