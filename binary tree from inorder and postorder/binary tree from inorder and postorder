@@ -1,0 +1,45 @@
+# 🌳 Construct Binary Tree from Inorder and Postorder Traversal
+
+This repository contains a **C++ implementation** to construct a **binary tree** from its **Inorder** and **Postorder** traversals.  
+The problem is based on the GeeksforGeeks challenge — [Construct Tree from Inorder and Postorder](https://www.geeksforgeeks.org/problems/tree-from-postorder-and-inorder/1).
+
+---
+
+## 🧠 Problem Statement
+
+Given two integer arrays **Inorder** and **Postorder** representing the traversal of a binary tree, construct and return the root of the binary tree.
+
+### Example:
+Input:
+Inorder = [4, 2, 5, 1, 6, 3]
+Postorder = [4, 5, 2, 6, 3, 1]
+
+Output (Preorder Traversal of Constructed Tree):
+1 2 4 5 3 6
+---
+
+## 🧩 Approach
+
+1. The **last element** in the postorder array represents the **root node**.
+2. Find the position of this root element in the inorder array.
+3. Elements **to the left** of that position in inorder belong to the **left subtree**.
+4. Elements **to the right** belong to the **right subtree**.
+5. Recursively construct the **right subtree first** (since we are traversing postorder from the end), then the left subtree.
+
+---
+
+## 🧮 Algorithm
+
+1. Initialize `index = postorder.size() - 1`.
+2. Pick the element `postorder[index]` as the root and decrement `index`.
+3. Search for the root value in the inorder array using a helper `find()` function.
+4. Recursively:
+   - Build the right subtree: `buildTreehelper(inorder, postorder, pos + 1, inend, index)`
+   - Build the left subtree:  `buildTreehelper(inorder, postorder, instart, pos - 1, index)`
+5. Return the constructed root node.
+
+
+🧾 Complexity Analysis
+Type	Complexity
+Time Complexity	O(N²) — for each node, we may scan the inorder array
+Space Complexity	O(N) — recursion stack and tree nodes
