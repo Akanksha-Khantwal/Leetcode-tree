@@ -1,0 +1,17 @@
+Node* postorder(int post[],int &index,int lower,int upper){
+    int val=post[index];
+    if(index<0 || val<lower ||  val>upper)
+    return NULL;
+    Node* root=new Node(val);
+    index--;
+    root->right=postorder(post,index,val,upper);
+    root->left=postorder(post,index,lower,val);
+    return root;
+}
+Node *constructTree(int post[], int size) {
+    int upper=INT_MAX;
+    int lower=INT_MIN;
+    int index=size-1;
+    return postorder(post,index,lower,upper);
+    
+}
