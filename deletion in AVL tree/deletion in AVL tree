@@ -1,17 +1,14 @@
-class Solution {
-  public:
-    int getheight(Node*root){
+int getheight(Node*root){
         if(!root)
         return 0;
         return root->height;
     }
-    int getbalance(Node* root){
+int getbalance(Node* root){
         if (!root)
         return 0;
-        return getheight(root->left)-getheight(root->right);
+        return getheight(root->left)- getheight(root->right);
     }
-    
-    Node *rightrotation(Node *root){
+Node *rightrotation(Node *root){
         Node* child=root->left;
         Node*childright=child->right;
         child->right=root;
@@ -31,39 +28,74 @@ class Solution {
         child->height=1+max(getheight(child->left),getheight(child->right));
         return child;
     }
-    /*You are required to complete this method */
-    Node* insertToAVL(Node* root, int key) {
-      if(!root)
-      return new Node(key);
-      
-      if(key <root->data)
-      root->left=insertToAVL(root->left,key);
-      else if(key>root->data)
-      root->right=insertToAVL(root->right,key);
-      else
-      return root;
-      
-      root->height=1+max(getheight(root->left),getheight(root->right));
-      //BALANCE CHECK
-      int balance=getbalance(root);
-      
-      //left-left case
-      if(balance>1&&key<root->left->data)
-      return rightrotation(root);
-      //right-right case
-      else if(balance<-1&&key>root->right->data)
-      return leftrotation(root);
-      //left-right case
-      else if(balance>1 &&key>root->left->data){
-      root->left=leftrotation(root->left);
-      return rightrotation(root);
-      }
-      
-      //right-left rotation
-      else if (balance<-1 && key<root->right->data){
-      root->right=rightrotation(root->right);
-      return leftrotation(root);
-      }
-      return root;
+Node* deleteNode(Node* root, int key) {
+    if(!root)
+    return NULL;
+    if(key<root->data){
+        root->left=deleteNode(root->left,key);
     }
-};
+    else if(key>root->data){
+        root->right=deleteNode(root->right,key);
+    }
+    else {
+        //leaf node
+        if(!root->left &&!root->right)
+        {
+            delete(root);
+            return NULL;
+        }
+        //1 child
+        else if(root->right &&!root->left){
+            Node * temp=root->right;
+            delete root;
+            return temp;
+        }
+        
+        else if(root->left && !root->right){
+            Node*temp=root->left;
+            delete root;
+            return temp;
+        }
+        //both child
+        else{
+            Node*curr=root->right;
+            while(curr->left){
+                curr=curr->left;
+            }
+            root->data=curr->data;
+            root->right=deleteNode(root->right,root->data);
+            
+        }
+    }
+        //height update 
+        root->height=1+max(getheight(root->left),getheight(root->right));
+        //check balance 
+        int balance=getbalance(root);
+        //left side
+        if(balance>1){
+            //LL
+            if(getbalance(root->left)>=0)
+            return rightrotation(root);
+            //LR
+            else{
+                root->left=leftrotation(root->left);
+                return rightrotation(root);
+            }
+            
+        }
+        //right side
+        else if(balance<-1){
+            //RR
+            if(getbalance(root->right)<=0)
+            return leftrotation(root);
+            //RL
+            else{
+                root->right=rightrotation(root->right);
+                return leftrotation(root);
+            }
+        }
+
+        return root;
+        
+    }
+    
