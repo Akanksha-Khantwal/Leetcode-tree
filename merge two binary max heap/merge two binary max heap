@@ -1,0 +1,36 @@
+// User function Template for C++
+
+class Solution {
+  public:
+    void Heapify(vector<int>&k,int index,int j){
+        int largest=index;
+        int left=2*index+1;
+        int right=2*index+2;
+        if(left<j&& k[left]>k[largest]){
+            largest=left;
+        }
+        if(right<j &&k[right]>k[largest]){
+            largest=right;
+        }
+        if(largest !=index){
+            swap(k[largest],k[index]);
+            Heapify(k,largest,j);
+            
+        }
+    }
+    vector<int> mergeHeaps(vector<int> &a, vector<int> &b, int n, int m) {
+       vector<int>k;
+       for(int i=0;i<a.size();i++){
+           k.push_back(a[i]);
+       }
+       for(int i=0;i<b.size();i++){
+           k.push_back(b[i]);
+       }
+      int j=n+m;
+       for(int i=j/2-1;i>=0;i--){
+           Heapify(k,i,j);
+       }
+       return k;
+        
+    }
+};
